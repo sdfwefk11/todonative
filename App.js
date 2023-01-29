@@ -12,7 +12,8 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { theme } from "./color";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const STORAGE_KEY = "@todos_key";
+const STORAGE_KEY1 = "@todos_key";
+const STORAGE_KEY2 = "@todos_bool";
 
 export default function App() {
   const [working, setWorking] = useState(true);
@@ -20,14 +21,24 @@ export default function App() {
   const [toDos, setToDos] = useState({});
   useEffect(() => {
     toDosLoad();
+    loadWorkBool();
   }, []);
+  const saveWorkBool = async () => {
+    const saveWorking = JSON.stringify(working);
+    await AsyncStorage.setItem(STORAGE_KEY2, saveWorking);
+    console.log(saveWorking);
+  };
+  const loadWorkBool = async () => {
+    const todos_bool = await AsyncStorage.getItem(STORAGE_KEY2);
+    setWorking(JSON.parse(todos_bool));
+  };
   const toDosLoad = async () => {
-    const s = await AsyncStorage.getItem(STORAGE_KEY);
-    setToDos(JSON.parse(s));
+    const todos_key = await AsyncStorage.getItem(STORAGE_KEY1);
+    setToDos(JSON.parse(todos_key));
   };
   const toDoSave = async (event) => {
     const saveTodos = JSON.stringify(event);
-    await AsyncStorage.setItem(STORAGE_KEY, saveTodos);
+    await AsyncStorage.setItem(STORAGE_KEY1, saveTodos);
   };
   const travel = () => {
     setWorking(false);
@@ -35,6 +46,9 @@ export default function App() {
   const work = () => {
     setWorking(true);
   };
+  useEffect(() => {
+    saveWorkBool();
+  }, [working]);
   const onChangeText = (payload) => {
     setText(payload);
   };
