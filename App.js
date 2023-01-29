@@ -19,14 +19,18 @@ export default function App() {
   const [working, setWorking] = useState(true);
   const [text, setText] = useState("");
   const [toDos, setToDos] = useState({});
+  const [checkToggle, setCheckToggle] = useState(false);
   useEffect(() => {
-    toDosLoad();
+    if (toDos !== null) {
+      toDosLoad();
+    } else {
+      return;
+    }
     loadWorkBool();
   }, []);
   const saveWorkBool = async () => {
     const saveWorking = JSON.stringify(working);
     await AsyncStorage.setItem(STORAGE_KEY2, saveWorking);
-    console.log(saveWorking);
   };
   const loadWorkBool = async () => {
     const todos_bool = await AsyncStorage.getItem(STORAGE_KEY2);
@@ -56,7 +60,10 @@ export default function App() {
     if (text === "") {
       return;
     }
-    const newToDos = { ...toDos, [Date.now()]: { text: text, work: working } };
+    const newToDos = {
+      ...toDos,
+      [Date.now()]: { text: text, work: working },
+    };
     setToDos(newToDos);
     await toDoSave(newToDos);
     setText("");
@@ -74,6 +81,14 @@ export default function App() {
         },
       },
     ]);
+  };
+  const checkToDos = async (item) => {
+    setCheckToggle((toggle) => !toggle);
+    const newToDos = { ...toDos };
+    const newToDos2 = { check: checkToggle };
+    newToDos[item] = { ...toDos[item], ...newToDos2 };
+    setToDos(newToDos);
+    await toDoSave(newToDos);
   };
   return (
     <View style={styles.container}>
@@ -110,7 +125,25 @@ export default function App() {
           {Object.keys(toDos).map((item) =>
             toDos[item].work === working ? (
               <View key={item} style={styles.toDo}>
-                <Text style={styles.toDoText}>{toDos[item].text}</Text>
+                <Text
+                  style={
+                    toDos[item].check
+                      ? {
+                          ...styles.toDoText,
+                          textDecorationLine: "line-through",
+                        }
+                      : styles.toDoText
+                  }
+                >
+                  {toDos[item].text}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    checkToDos(item);
+                  }}
+                >
+                  <Text>Check</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
                     deleteToDo(item);
