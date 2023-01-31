@@ -9,7 +9,7 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 import { theme } from "./color";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const STORAGE_KEY1 = "@todos_key";
@@ -131,6 +131,7 @@ export default function App() {
                       ? {
                           ...styles.toDoText,
                           textDecorationLine: "line-through",
+                          color: "red",
                         }
                       : styles.toDoText
                   }
@@ -138,11 +139,16 @@ export default function App() {
                   {toDos[item].text}
                 </Text>
                 <TouchableOpacity
+                  style={styles.checkBtn}
                   onPress={() => {
                     checkToDos(item);
                   }}
                 >
-                  <Text>Check</Text>
+                  <Feather
+                    name="check-square"
+                    size={24}
+                    color={theme.background}
+                  />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
@@ -199,5 +205,8 @@ const styles = StyleSheet.create({
   },
   toDoText: {
     color: "black",
+  },
+  checkBtn: {
+    marginLeft: 270,
   },
 });
