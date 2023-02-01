@@ -20,6 +20,7 @@ export default function App() {
   const [text, setText] = useState("");
   const [toDos, setToDos] = useState({});
   const [checkToggle, setCheckToggle] = useState(false);
+  const [editing, setEdting] = useState(false);
   useEffect(() => {
     if (toDos !== null) {
       toDosLoad();
@@ -90,6 +91,9 @@ export default function App() {
     setToDos(newToDos);
     await toDoSave(newToDos);
   };
+  const editText = () => {
+    setEdting(true);
+  };
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -138,6 +142,7 @@ export default function App() {
                 >
                   {toDos[item].text}
                 </Text>
+
                 <TouchableOpacity
                   style={styles.checkBtn}
                   onPress={() => {
@@ -149,6 +154,9 @@ export default function App() {
                     size={24}
                     color={theme.background}
                   />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={editText}>
+                  <Feather name="edit" size={24} color={theme.background} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
@@ -207,6 +215,6 @@ const styles = StyleSheet.create({
     color: "black",
   },
   checkBtn: {
-    marginLeft: 270,
+    marginLeft: 240,
   },
 });
