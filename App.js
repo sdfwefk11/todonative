@@ -94,6 +94,7 @@ export default function App() {
   const editText = () => {
     setEdting(true);
   };
+  console.log(editing);
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
