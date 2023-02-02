@@ -21,6 +21,7 @@ export default function App() {
   const [toDos, setToDos] = useState({});
   const [checkToggle, setCheckToggle] = useState(false);
   const [editing, setEdting] = useState(false);
+  const [changeToDo, setChangeToDo] = useState("");
   useEffect(() => {
     if (toDos !== null) {
       toDosLoad();
@@ -91,10 +92,16 @@ export default function App() {
     setToDos(newToDos);
     await toDoSave(newToDos);
   };
-  const editText = () => {
+  const editText = (event) => {
     setEdting(true);
+    console.log(event);
   };
-  console.log(editing);
+  const editDone = () => {
+    setEdting(false);
+  };
+  const changeText = (event) => {
+    setChangeToDo(event);
+  };
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -126,52 +133,70 @@ export default function App() {
           style={styles.input}
           placeholder={working ? "Work" : "Travel"}
         />
-        <ScrollView>
-          {Object.keys(toDos).map((item) =>
-            toDos[item].work === working ? (
-              <View key={item} style={styles.toDo}>
-                <Text
-                  style={
-                    toDos[item].check
-                      ? {
-                          ...styles.toDoText,
-                          textDecorationLine: "line-through",
-                          color: "red",
-                        }
-                      : styles.toDoText
-                  }
-                >
-                  {toDos[item].text}
-                </Text>
+        {editing ? (
+          <View>
+            <TextInput onChangeText={changeText}>{changeToDo}</TextInput>
+            <TouchableOpacity>
+              <AntDesign
+                name="check"
+                size={24}
+                color="black"
+                onPress={editDone}
+              />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <ScrollView>
+            {Object.keys(toDos).map((item) =>
+              toDos[item].work === working ? (
+                <View key={item} style={styles.toDo}>
+                  <Text
+                    style={
+                      toDos[item].check
+                        ? {
+                            ...styles.toDoText,
+                            textDecorationLine: "line-through",
+                            color: "red",
+                          }
+                        : styles.toDoText
+                    }
+                  >
+                    {toDos[item].text}
+                  </Text>
 
-                <TouchableOpacity
-                  style={styles.checkBtn}
-                  onPress={() => {
-                    checkToDos(item);
-                  }}
-                >
-                  <Feather
-                    name="check-square"
-                    size={24}
-                    color={theme.background}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={editText}>
-                  <Feather name="edit" size={24} color={theme.background} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    deleteToDo(item);
-                  }}
-                >
-                  <AntDesign name="delete" size={24} color={theme.background} />
-                </TouchableOpacity>
-              </View>
-            ) : (
-              ""
-            )
-          )}
-        </ScrollView>
+                  <TouchableOpacity
+                    style={styles.checkBtn}
+                    onPress={() => {
+                      checkToDos(item);
+                    }}
+                  >
+                    <Feather
+                      name="check-square"
+                      size={24}
+                      color={theme.background}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => editText(item)}>
+                    <Feather name="edit" size={24} color={theme.background} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      deleteToDo(item);
+                    }}
+                  >
+                    <AntDesign
+                      name="delete"
+                      size={24}
+                      color={theme.background}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                ""
+              )
+            )}
+          </ScrollView>
+        )}
       </View>
     </View>
   );
