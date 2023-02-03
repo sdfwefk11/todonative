@@ -19,7 +19,7 @@ export default function App() {
   const [working, setWorking] = useState(true);
   const [text, setText] = useState("");
   const [toDos, setToDos] = useState({});
-  const [checkToggle, setCheckToggle] = useState(false);
+  const [checkToggle, setCheckToggle] = useState(true);
   const [editing, setEdting] = useState(false);
   const [changeToDo, setChangeToDo] = useState("");
   useEffect(() => {
@@ -64,7 +64,7 @@ export default function App() {
     }
     const newToDos = {
       ...toDos,
-      [Date.now()]: { text: text, work: working },
+      [Date.now()]: { text: text, work: working, check: false },
     };
     setToDos(newToDos);
     await toDoSave(newToDos);
@@ -84,8 +84,17 @@ export default function App() {
       },
     ]);
   };
-  const checkToDos = async (item) => {
-    setCheckToggle((toggle) => !toggle);
+  const checkToDos = (item, check) => {
+    if (!check) {
+      setCheckToggle(true);
+      save(item);
+    } else if (check) {
+      setCheckToggle(false);
+      save(item);
+    }
+    return;
+  };
+  const save = async (item) => {
     const newToDos = { ...toDos };
     const newToDos2 = { check: checkToggle };
     newToDos[item] = { ...toDos[item], ...newToDos2 };
@@ -102,6 +111,7 @@ export default function App() {
   const changeText = (event) => {
     setChangeToDo(event);
   };
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -167,7 +177,7 @@ export default function App() {
                   <TouchableOpacity
                     style={styles.checkBtn}
                     onPress={() => {
-                      checkToDos(item);
+                      checkToDos(item, toDos[item].check);
                     }}
                   >
                     <Feather
