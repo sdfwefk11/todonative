@@ -9,7 +9,7 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { AntDesign, Feather } from "@expo/vector-icons";
+import { AntDesign, Feather, Fontisto } from "@expo/vector-icons";
 import { theme } from "./color";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const STORAGE_KEY1 = "@todos_key";
@@ -107,18 +107,24 @@ export default function App() {
     setEdting(true);
   };
   const editDone = async () => {
-    const newToDos = { ...toDos };
-    const newToDos2 = { text: changeToDo };
-    newToDos[editNum] = { ...toDos[editNum], ...newToDos2 };
-    setToDos(newToDos);
-    setChangeToDo("");
-    await toDoSave(newToDos);
-    setEdting(false);
+    if (changeToDo === "") {
+      Alert.alert("오류", "아무것도 입력하지 않았습니다.", [{ text: "확인" }]);
+    } else {
+      const newToDos = { ...toDos };
+      const newToDos2 = { text: changeToDo };
+      newToDos[editNum] = { ...toDos[editNum], ...newToDos2 };
+      setToDos(newToDos);
+      setChangeToDo("");
+      await toDoSave(newToDos);
+      setEdting(false);
+    }
   };
   const changeText = (event) => {
     setChangeToDo(event);
   };
-
+  const cancelBtn = () => {
+    setEdting(false);
+  };
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -141,30 +147,44 @@ export default function App() {
           </Text>
         </TouchableOpacity>
       </View>
-      <View>
-        <TextInput
-          returnKeyType="done"
-          onSubmitEditing={addTodo}
-          value={text}
-          onChangeText={onChangeText}
-          style={styles.input}
-          placeholder={working ? "Work" : "Travel"}
-        />
-        {editing ? (
-          <View>
-            <TextInput onChangeText={changeText} placeholder="Edit Here!">
-              {changeToDo}
-            </TextInput>
+      {editing ? (
+        <View>
+          <TextInput
+            style={{ ...styles.toDo, marginTop: 50 }}
+            onChangeText={changeText}
+            placeholder="Edit Here!"
+          >
+            {changeToDo}
+          </TextInput>
+          <View style={styles.checkBtn2}>
             <TouchableOpacity>
               <AntDesign
                 name="check"
-                size={24}
-                color="black"
+                size={40}
+                color="blue"
                 onPress={editDone}
               />
             </TouchableOpacity>
+            <TouchableOpacity>
+              <Fontisto
+                name="close-a"
+                size={25}
+                color="red"
+                onPress={cancelBtn}
+              />
+            </TouchableOpacity>
           </View>
-        ) : (
+        </View>
+      ) : (
+        <View>
+          <TextInput
+            returnKeyType="done"
+            onSubmitEditing={addTodo}
+            value={text}
+            onChangeText={onChangeText}
+            style={styles.input}
+            placeholder={working ? "Work" : "Travel"}
+          />
           <ScrollView>
             {Object.keys(toDos).map((item) =>
               toDos[item].work === working ? (
@@ -215,8 +235,8 @@ export default function App() {
               )
             )}
           </ScrollView>
-        )}
-      </View>
+        </View>
+      )}
     </View>
   );
 }
@@ -261,5 +281,11 @@ const styles = StyleSheet.create({
   },
   checkBtn: {
     marginLeft: 240,
+  },
+  checkBtn2: {
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    marginTop: 20,
+    flexDirection: "row",
   },
 });
