@@ -22,6 +22,7 @@ export default function App() {
   const [checkToggle, setCheckToggle] = useState(true);
   const [editing, setEdting] = useState(false);
   const [changeToDo, setChangeToDo] = useState("");
+  const [editNum, setEditNum] = useState("");
   useEffect(() => {
     if (toDos !== null) {
       toDosLoad();
@@ -102,11 +103,16 @@ export default function App() {
     await toDoSave(newToDos);
   };
   const editText = (event) => {
+    setEditNum(event);
     setEdting(true);
-    console.log(event);
   };
-  const editDone = () => {
+  const editDone = async () => {
     const newToDos = { ...toDos };
+    const newToDos2 = { text: changeToDo };
+    newToDos[editNum] = { ...toDos[editNum], ...newToDos2 };
+    setToDos(newToDos);
+    setChangeToDo("");
+    await toDoSave(newToDos);
     setEdting(false);
   };
   const changeText = (event) => {
