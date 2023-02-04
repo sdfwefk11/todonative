@@ -106,6 +106,7 @@ export default function App() {
     console.log(event);
   };
   const editDone = () => {
+    const newToDos = { ...toDos };
     setEdting(false);
   };
   const changeText = (event) => {
@@ -145,7 +146,9 @@ export default function App() {
         />
         {editing ? (
           <View>
-            <TextInput onChangeText={changeText}>{changeToDo}</TextInput>
+            <TextInput onChangeText={changeText} placeholder="Edit Here!">
+              {changeToDo}
+            </TextInput>
             <TouchableOpacity>
               <AntDesign
                 name="check"
