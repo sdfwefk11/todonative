@@ -8,6 +8,7 @@ import {
   TextInput,
   ScrollView,
   Alert,
+  Platform,
 } from "react-native";
 import { AntDesign, Feather, Fontisto } from "@expo/vector-icons";
 import { theme } from "./color";
@@ -72,18 +73,28 @@ export default function App() {
     setText("");
   };
   const deleteToDo = (event) => {
-    Alert.alert("삭제", "할 일이 삭제됩니다.", [
-      { text: "취소" },
-      {
-        text: "삭제",
-        onPress: async () => {
-          const newToDos = { ...toDos };
-          delete newToDos[event];
-          setToDos(newToDos);
-          await toDoSave(newToDos);
+    if (Platform.OS === "web") {
+      const ok = confirm("할 일이 삭제됩니다.");
+      if (ok) {
+        const newToDos = { ...toDos };
+        delete newToDos[event];
+        setToDos(newToDos);
+        toDoSave(newToDos);
+      }
+    } else {
+      Alert.alert("삭제", "할 일이 삭제됩니다.", [
+        { text: "취소" },
+        {
+          text: "삭제",
+          onPress: async () => {
+            const newToDos = { ...toDos };
+            delete newToDos[event];
+            setToDos(newToDos);
+            await toDoSave(newToDos);
+          },
         },
-      },
-    ]);
+      ]);
+    }
   };
   const checkToDos = (item, check) => {
     if (!check) {
@@ -131,7 +142,11 @@ export default function App() {
       <View style={styles.header}>
         <TouchableOpacity onPress={work}>
           <Text
-            style={{ ...styles.btnText, color: working ? "white" : theme.grey }}
+            style={{
+              fontSize: 38,
+              fontWeight: "600",
+              color: working ? "white" : theme.grey,
+            }}
           >
             Work
           </Text>
@@ -139,7 +154,8 @@ export default function App() {
         <TouchableOpacity onPress={travel}>
           <Text
             style={{
-              ...styles.btnText,
+              fontSize: 38,
+              fontWeight: "600",
               color: !working ? "white" : theme.grey,
             }}
           >
@@ -251,10 +267,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 100,
     paddingHorizontal: 20,
-  },
-  btnText: {
-    fontSize: 38,
-    fontWeight: "600",
   },
   input: {
     backgroundColor: "white",

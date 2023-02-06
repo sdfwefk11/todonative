@@ -3,13 +3,14 @@
     "name": "TodoApp",
     "slug": "TodoApp",
     "version": "1.0.0",
+    "sdkVersion": "46.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#CCE8F2"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,11 +24,17 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+        "backgroundColor": "#CCE8F2"
+      },
+      "package": "com.jsjs.TodoApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c39b172c-0bf2-4852-8e10-82b72fe91e98"
+      }
     }
   }
 }
