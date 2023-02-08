@@ -136,6 +136,10 @@ export default function App() {
   const cancelBtn = () => {
     setEdting(false);
   };
+  const delAll = () => {
+    if (working) {
+    }
+  };
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -201,6 +205,15 @@ export default function App() {
             style={styles.input}
             placeholder={working ? "Work" : "Travel"}
           />
+          <View style={styles.delAllBtn}>
+            <AntDesign
+              style={{ marginRight: 15 }}
+              name="delete"
+              size={24}
+              color="red"
+              onPress={delAll}
+            />
+          </View>
           <ScrollView>
             {Object.keys(toDos).map((item) =>
               toDos[item].work === working ? (
@@ -273,7 +286,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 30,
-    marginVertical: 30,
     fontSize: 15,
   },
   toDo: {
@@ -299,5 +311,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
     flexDirection: "row",
+  },
+  delAllBtn: {
+    justifyContent: "center",
+    alignItems: "flex-end",
+    marginVertical: 20,
   },
 });
