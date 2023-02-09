@@ -205,15 +205,7 @@ export default function App() {
             style={styles.input}
             placeholder={working ? "Work" : "Travel"}
           />
-          <View style={styles.delAllBtn}>
-            <AntDesign
-              style={{ marginRight: 15 }}
-              name="delete"
-              size={24}
-              color="red"
-              onPress={delAll}
-            />
-          </View>
+
           <ScrollView>
             {Object.keys(toDos).map((item) =>
               toDos[item].work === working ? (
@@ -263,6 +255,9 @@ export default function App() {
                 ""
               )
             )}
+            <View style={styles.delAllBtn}>
+              <AntDesign name="delete" size={24} color="red" onPress={delAll} />
+            </View>
           </ScrollView>
         </View>
       )}
@@ -287,6 +282,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 30,
     fontSize: 15,
+    marginVertical: 20,
   },
   toDo: {
     backgroundColor: "#FFE6F2",
@@ -314,7 +310,7 @@ const styles = StyleSheet.create({
   },
   delAllBtn: {
     justifyContent: "center",
-    alignItems: "flex-end",
+    alignItems: "center",
     marginVertical: 20,
   },
 });
